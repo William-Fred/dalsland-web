@@ -8,8 +8,14 @@ A booking site for renting a cabin in Dalsland, Sweden. Guests view the property
 
 - [README.md](./README.md) — setup, commands, branch strategy
 - [ARCHITECTURE.md](./ARCHITECTURE.md) — tech stack, page routes, DB schema, CI/CD flow
-- [DECISIONS.md](./DECISIONS.md) — why each technology was chosen (pros/cons)
-- [ROADMAP.md](./ROADMAP.md) — milestone-based feature checklist
+- [DECISIONS.md](./DECISIONS.md) — why each technology was chosen (pros/cons); consult before making architectural choices
+- [ROADMAP.md](./ROADMAP.md) — milestone-based feature checklist; this is the source of truth for current progress
+
+## On every session start
+
+1. Read ROADMAP.md and compare it against the current codebase.
+2. Update any checkboxes that are complete but not yet marked.
+3. Briefly summarise what's done and what's next before proceeding.
 
 ## Tech stack (quick reference)
 
@@ -46,19 +52,17 @@ dalsland-web/               ← git root — docker-compose, CI, docs
 
 ## Current state
 
-Actively working on: **Milestone 1 — Database and auth** (not yet started).
+See [ROADMAP.md](./ROADMAP.md) — it is the single source of truth for all milestone and task progress.
 
-Completed:
-- Next.js + Tailwind initialized
-- GitHub Actions pipeline (lint + build on push/PR)
+## Roadmap maintenance — required
 
-Pending (in order):
-1. Install postgres.js, tsx; create `db/index.ts` and `db/migrate.ts`
-2. Docker Compose for local Postgres + `.env.local`
-3. SQL migrations (users, bookings, blocked_dates, attractions)
-4. Auth.js setup — login page, middleware, seed script for first admin
+After completing any task:
 
-Everything from Milestone 2 onward (landing page, booking page, admin view) is not started. See [ROADMAP.md](./ROADMAP.md) for the full checklist.
+1. **Update ROADMAP.md** — change the checkbox from `[ ]` to `[x]` for the completed item.
+
+2. **Suggest the next step** — after finishing a task, briefly state what the natural next task is, referencing the roadmap item by name. Do not ask for confirmation unless there is genuine ambiguity.
+
+This keeps the project state accurate and reduces the need to re-read all docs at the start of every session.
 
 ## Coding conventions
 
@@ -78,6 +82,7 @@ Everything from Milestone 2 onward (landing page, booking page, admin view) is n
 - Do not push directly to `main`
 - Do not add `"use client"` to a component unless it genuinely needs browser APIs or event handlers
 - Do not store secrets in code — use `.env.local` locally, Vercel dashboard in prod
+- Do not consult DECISIONS.md to re-litigate closed decisions — it is a record, not an invitation to revisit
 
 ## Common workflows
 

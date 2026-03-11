@@ -1,88 +1,88 @@
-# Tekniska val och beslut — Dalsland Web
+# Technical Choices and Decisions — Dalsland Web
 
-Här dokumenterar vi val vi ställts inför, för- och nackdelar, och vilket beslut vi tog.
+Here we document the choices we have faced, their pros and cons, and the decision we made.
 
-Se [README.md](./README.md) för hur du kör projektet lokalt.
+See [README.md](./README.md) for how to run the project locally.
 
 ---
 
-## Sammanfattning av fattade beslut
+## Summary of decisions made
 
-| Område | Beslut |
+| Area | Decision |
 |---|---|
 | Hosting (app) | Vercel |
-| Hosting (databas) | Neon (serverless Postgres) |
-| Databasklient | postgres.js med manuella SQL-migreringar |
-| Auth | Auth.js med credentials + users-tabell |
-| Karta | Leaflet.js |
-| CI/CD | GitHub Actions (build-check) + Vercel auto-deploy |
-| Branch-strategi | `feat/**` → PR → main, branch-skydd i GitHub |
-| DB-migrationer | Manuellt med `drizzle-kit migrate` |
-| E-post | Ej beslutat — Resend rekommenderas |
+| Hosting (database) | Neon (serverless Postgres) |
+| Database client | postgres.js with manual SQL migrations |
+| Auth | Auth.js with credentials + users table |
+| Map | Leaflet.js |
+| CI/CD | GitHub Actions (build check) + Vercel auto-deploy |
+| Branch strategy | `feat/**` → PR → main, branch protection in GitHub |
+| DB migrations | Manual with `drizzle-kit migrate` |
+| Email | Not decided — Resend recommended |
 
 ---
 
-## Hosting av Next.js
+## Hosting of Next.js
 
-### Alternativ A: Vercel ✅
-Next.js deployar nativt utan Docker. Deploy via git push.
+### Option A: Vercel ✅
+Next.js deploys natively without Docker. Deploy via git push.
 
-**Fördelar**
-- Gratis att börja
-- Noll serverhantering
-- Inbyggd integration med Neon (Postgres)
-- Automatisk deploy vid push till main
-- Preview-deploy per PR
+**Pros**
+- Free to start
+- Zero server management
+- Built-in integration with Neon (Postgres)
+- Automatic deploy on push to main
+- Preview deploy per PR
 
-**Nackdelar**
-- Inget stöd för Docker-containers
-- Gratisnivå har begränsningar (bandbredd, serverless cold starts)
+**Cons**
+- No support for Docker containers
+- Free tier has limitations (bandwidth, serverless cold starts)
 
-### Alternativ B: Fly.io / Railway (Docker)
+### Option B: Fly.io / Railway (Docker)
 
-**Fördelar**
-- Docker hela vägen
-- Mer kontroll, lättare att flytta till VPS
+**Pros**
+- Docker all the way
+- More control, easier to move to a VPS
 
-**Nackdelar**
-- Mer setup, Railway kräver betalplan efter en tid
-
----
-
-## Hosting av Postgres
-
-### Alternativ A: Neon ✅
-
-**Fördelar**
-- Gratis
-- Ingen serverhantering
-- `DATABASE_URL` injiceras automatiskt via Vercel-integration
-
-**Nackdelar**
-- Serverless — connection pooling behövs (Neon adapter för Drizzle)
-
-### Alternativ B: Supabase
-
-**Fördelar:** Inbyggd auth, bra dashboard
-**Nackdelar:** Mer än vi behöver, vendor lock-in
-
-### Alternativ C: Postgres i Docker (VPS)
-
-**Fördelar:** Full kontroll
-**Nackdelar:** Kräver backup-hantering själv
+**Cons**
+- More setup, Railway requires a paid plan after a while
 
 ---
 
-## Databasklient och migreringar
+## Hosting of Postgres
 
-### Alternativ A: Drizzle ORM
+### Option A: Neon ✅
 
-**Fördelar:** Automatisk migrationsgenerering från TypeScript-schema, typkontroll
-**Nackdelar:** Abstraktion ovanpå SQL, man skriver TS-syntax istället för SQL
+**Pros**
+- Free
+- No server management
+- `DATABASE_URL` is injected automatically via Vercel integration
 
-### Alternativ B: postgres.js (rå SQL) ✅
+**Cons**
+- Serverless — connection pooling needed (Neon adapter for Drizzle)
 
-Skriver SQL direkt med tagged template literals. Migreringar är numrerade `.sql`-filer som körs i ordning av ett eget script.
+### Option B: Supabase
+
+**Pros:** Built-in auth, good dashboard
+**Cons:** More than we need, vendor lock-in
+
+### Option C: Postgres in Docker (VPS)
+
+**Pros:** Full control
+**Cons:** Requires managing backups yourself
+
+---
+
+## Database client and migrations
+
+### Option A: Drizzle ORM
+
+**Pros:** Automatic migration generation from TypeScript schema, type checking
+**Cons:** Abstraction on top of SQL, you write TS syntax instead of SQL
+
+### Option B: postgres.js (raw SQL) ✅
+
+Writes SQL directly with tagged template literals. Migrations are numbered `.sql` files run in order by a custom script.
 
 ```ts
 const rows = await sql<Booking[]>`
@@ -90,98 +90,98 @@ const rows = await sql<Booking[]>`
 `
 ```
 
-**Fördelar**
-- Skriver ren SQL — full kontroll, inga abstraktioner
-- Migreringshistorik är läsbar (en SQL-fil per ändring)
-- Samma fil körs aldrig två gånger — spåras i `migrations`-tabell
-- Nära Dapper-känsla för den som kan SQL
+**Pros**
+- Writes plain SQL — full control, no abstractions
+- Migration history is readable (one SQL file per change)
+- The same file is never run twice — tracked in `migrations` table
+- Familiar feel for anyone who knows SQL
 
-**Nackdelar**
-- Inga autogenererade typer från schema — typer skrivs manuellt
-- Migrationer skapas manuellt
+**Cons**
+- No auto-generated types from schema — types written manually
+- Migrations created manually
 
-### Alternativ C: Kysely (type-safe query builder)
+### Option C: Kysely (type-safe query builder)
 
-**Fördelar:** Automatiska typer, nära SQL-syntax
-**Nackdelar:** Ytterligare ett beroende, mer setup
-
----
-
-## Autentisering
-
-### Alternativ A: Enkelt lösenord via miljövariabel
-
-**Fördelar:** Extremt enkelt
-**Nackdelar:** Ingen användarhantering, alla delar lösenord
-
-### Alternativ B: Auth.js (NextAuth v5) ✅
-Email + lösenord i `users`-tabell med roller (admin/user).
-
-**Fördelar**
-- Riktig användarhantering med roller
-- Enkelt att bygga ut med Google-inloggning
-- Bra integration med Next.js App Router och middleware
-
-**Nackdelar:** Mer setup än Alternativ A
+**Pros:** Automatic types, close to SQL syntax
+**Cons:** Additional dependency, more setup
 
 ---
 
-## CI/CD och branch-strategi
+## Authentication
 
-### Beslut ✅
+### Option A: Simple password via environment variable
 
-- Feature-branches namnges `feat/<beskrivning>`
-- Ingen direktpush till `main` — branch-skydd satt i GitHub
-- GitHub Actions kör `npm run build` vid push till `feat/**`, `main` och vid PR mot `main`
-- Vercel deployas automatiskt vid merge till `main`
-- Varje PR får en unik preview-URL från Vercel
+**Pros:** Extremely simple
+**Cons:** No user management, everyone shares the password
+
+### Option B: Auth.js (NextAuth v5) ✅
+Email + password in `users` table with roles (admin/user).
+
+**Pros**
+- Proper user management with roles
+- Easy to extend with Google login
+- Good integration with Next.js App Router and middleware
+
+**Cons:** More setup than Option A
+
+---
+
+## CI/CD and branch strategy
+
+### Decision ✅
+
+- Feature branches are named `feat/<description>`
+- No direct push to `main` — branch protection set in GitHub
+- GitHub Actions runs `npm run build` on push to `feat/**`, `main`, and on PRs against `main`
+- Vercel deploys automatically on merge to `main`
+- Every PR gets a unique preview URL from Vercel
 
 ```
-feat/min-branch → push → pipeline kör → PR → preview-URL → merge → prod
+feat/my-branch → push → pipeline runs → PR → preview URL → merge → prod
 ```
 
 ---
 
-## Databasmigrationer i produktion
+## Database migrations in production
 
-### Alternativ A: Manuellt ✅
-Kör `npx drizzle-kit migrate` efter merge till main.
+### Option A: Manual ✅
+Run `npx drizzle-kit migrate` after merging to main.
 
-**Fördelar:** Enkelt, full kontroll
-**Nackdelar:** Kan glömmas bort
+**Pros:** Simple, full control
+**Cons:** Can be forgotten
 
-### Alternativ B: Automatiskt via GitHub Actions
-CI kör migrationer mot prod-databasen efter deploy.
+### Option B: Automatic via GitHub Actions
+CI runs migrations against the prod database after deploy.
 
-**Fördelar:** Kan inte glömmas
-**Nackdelar:** Kräver `DATABASE_URL` som GitHub Secret
-
----
-
-## Karttjänst
-
-### Alternativ A: Leaflet.js ✅
-
-**Fördelar:** Gratis, ingen API-nyckel, fungerar med Next.js via dynamisk import
-**Nackdelar:** Lite mer manuellt än Google Maps
-
-### Alternativ B: Google Maps / Mapbox
-
-**Fördelar:** Snyggare, mer features
-**Nackdelar:** Kräver API-nyckel och kreditkort
+**Pros:** Cannot be forgotten
+**Cons:** Requires `DATABASE_URL` as a GitHub Secret
 
 ---
 
-## E-postnotifieringar
+## Map service
 
-### Alternativ A: Resend (rekommenderas)
+### Option A: Leaflet.js ✅
 
-**Fördelar:** Gratis 3 000 mail/månad, enkelt API
-**Nackdelar:** Kräver domänverifiering
+**Pros:** Free, no API key required, works with Next.js via dynamic import
+**Cons:** Slightly more manual than Google Maps
 
-### Alternativ B: Nodemailer + SMTP
+### Option B: Google Maps / Mapbox
 
-**Fördelar:** Inga externa tjänster
-**Nackdelar:** Gmail SMTP krånglar, mer konfiguration
+**Pros:** Better looking, more features
+**Cons:** Requires API key and credit card
 
-**Status: Ej beslutat.**
+---
+
+## Email notifications
+
+### Option A: Resend (recommended)
+
+**Pros:** Free 3,000 emails/month, simple API
+**Cons:** Requires domain verification
+
+### Option B: Nodemailer + SMTP
+
+**Pros:** No external services
+**Cons:** Gmail SMTP is finicky, more configuration
+
+**Status: Not decided.**

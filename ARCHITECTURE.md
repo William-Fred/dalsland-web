@@ -1,71 +1,71 @@
-# Arkitektur — Dalsland Web (Bokningssida)
+# Architecture — Dalsland Web (Booking Site)
 
-## Översikt
+## Overview
 
-Bokningssida för uthyrning av stuga/ställe i Dalsland. Gäster kan se stället, utforska aktiviteter i närheten och skicka bokningsförfrågningar. Ägarna hanterar bokningar och innehåll via en adminvy med rollbaserad åtkomst.
+Booking site for renting a cabin/property in Dalsland. Guests can view the property, explore nearby activities, and submit booking requests. Owners manage bookings and content via an admin view with role-based access.
 
 ## Tech Stack
 
-| Lager | Teknik |
+| Layer | Technology |
 |---|---|
 | Frontend + Backend | Next.js (App Router) |
-| Databas | PostgreSQL via Neon (prod) / Docker (lokalt) |
-| Databasklient | postgres.js (rå SQL) |
+| Database | PostgreSQL via Neon (prod) / Docker (local) |
+| Database client | postgres.js (raw SQL) |
 | Styling | Tailwind CSS v4 |
-| Auth | Auth.js (NextAuth v5) med credentials-provider |
-| Karta | Leaflet.js (dynamisk import — SSR-säker) |
-| Bilder | Statiska filer i `/public/images/` (kan migreras till Vercel Blob senare) |
+| Auth | Auth.js (NextAuth v5) with credentials provider |
+| Map | Leaflet.js (dynamic import — SSR-safe) |
+| Images | Static files in `/public/images/` (can be migrated to Vercel Blob later) |
 | Hosting | Vercel |
-| Lokal dev (DB) | Docker Compose |
+| Local dev (DB) | Docker Compose |
 
-## Sidor
+## Pages
 
-| Route | Åtkomst | Innehåll |
+| Route | Access | Content |
 |---|---|---|
-| `/` | Publik | Landningssida — info om stället, bildgalleri, karta, highlights |
-| `/utforska` | Publik | Sevärdheter och aktiviteter i närheten med karta |
-| `/boka` | Publik | Kalender + bokningsformulär |
-| `/admin` | Admin | Översikt |
-| `/admin/bokningar` | Admin | Hantera och godkänna bokningar |
-| `/admin/användare` | Admin | Hantera användare och roller |
-| `/admin/attraktioner` | Admin | Lägg till/redigera sevärdheter |
+| `/` | Public | Landing page — property info, image gallery, map, highlights |
+| `/explore` | Public | Nearby attractions and activities with map |
+| `/book` | Public | Calendar + booking form |
+| `/admin` | Admin | Overview |
+| `/admin/bookings` | Admin | Manage and approve bookings |
+| `/admin/users` | Admin | Manage users and roles |
+| `/admin/attractions` | Admin | Add/edit attractions |
 
-## Projektstruktur
+## Project Structure
 
 ```
 dalsland-web/
 ├── app/
-│   ├── page.tsx                        # Landningssida
+│   ├── page.tsx                        # Landing page
 │   ├── layout.tsx
-│   ├── utforska/
-│   │   └── page.tsx                    # Aktiviteter och sevärdheter
-│   ├── boka/
-│   │   └── page.tsx                    # Kalender + bokningsformulär
+│   ├── explore/
+│   │   └── page.tsx                    # Activities and attractions
+│   ├── book/
+│   │   └── page.tsx                    # Calendar + booking form
 │   ├── admin/
-│   │   ├── layout.tsx                  # Skyddat med Auth.js middleware
-│   │   ├── page.tsx                    # Admin-översikt
-│   │   ├── bokningar/page.tsx
-│   │   ├── användare/page.tsx
-│   │   └── attraktioner/page.tsx
+│   │   ├── layout.tsx                  # Protected with Auth.js middleware
+│   │   ├── page.tsx                    # Admin overview
+│   │   ├── bookings/page.tsx
+│   │   ├── users/page.tsx
+│   │   └── attractions/page.tsx
 │   └── api/
 │       ├── auth/[...nextauth]/route.ts # Auth.js handler
 │       ├── bookings/route.ts
 │       ├── availability/route.ts
 │       └── attractions/route.ts
 ├── db/
-│   ├── index.ts                        # DB-uppkoppling (postgres.js)
-│   ├── migrate.ts                      # Migreringsscript — kör nya SQL-filer
+│   ├── index.ts                        # DB connection (postgres.js)
+│   ├── migrate.ts                      # Migration script — runs new SQL files
 │   └── migrations/
 │       ├── 001_create_bookings.sql
 │       ├── 002_create_blocked_dates.sql
 │       ├── 003_create_users.sql
 │       └── 004_create_attractions.sql
-├── middleware.ts                       # Skyddar /admin/** med Auth.js
-├── docker-compose.yml                  # Postgres för lokal dev
-└── .env.local                          # Gitignorerad
+├── middleware.ts                       # Protects /admin/** with Auth.js
+├── docker-compose.yml                  # Postgres for local dev
+└── .env.local                          # Gitignored
 ```
 
-## Databasschema
+## Database Schema
 
 ```
 bookings
@@ -82,61 +82,61 @@ attractions
   description, lat, lng, distance_km, image_url, created_at
 ```
 
-`status` på bokning: `pending` → `approved` / `rejected`
+`status` on a booking: `pending` → `approved` / `rejected`
 
-## Autentisering och roller
+## Authentication and Roles
 
-Auth hanteras av **Auth.js** med credentials-provider (email + lösenord).
-Skyddade routes (`/admin/**`) kontrolleras i `middleware.ts` via session-token.
+Auth is handled by **Auth.js** with a credentials provider (email + password).
+Protected routes (`/admin/**`) are controlled in `middleware.ts` via session token.
 
 ```
-Publik användare  → kan se landningssida, utforska, skicka bokningsförfrågan
-Inloggad (admin)  → kan hantera bokningar, användare, attraktioner
+Public user   → can view landing page, explore, submit booking request
+Logged in (admin)  → can manage bookings, users, attractions
 ```
 
-## Deploy och CI/CD
+## Deploy and CI/CD
 
 ```
 git push → GitHub Actions → Vercel → live
 ```
 
-1. **GitHub** — källkod, PR-flöde
-2. **GitHub Actions** — kör lint + typkontroll vid varje push/PR
-3. **Vercel** — auto-deploy vid merge till `main`; preview-deploy vid varje PR
-4. **Neon** — hanteras som Vercel-integration; `DATABASE_URL` injiceras automatiskt
+1. **GitHub** — source code, PR workflow
+2. **GitHub Actions** — runs lint + type check on every push/PR
+3. **Vercel** — auto-deploy on merge to `main`; preview deploy on every PR
+4. **Neon** — managed as a Vercel integration; `DATABASE_URL` is injected automatically
 
-### Flöde för ny feature
+### New feature workflow
 
 ```
-feature-branch → PR → GitHub Actions (lint/type-check) → preview-URL på Vercel → merge → prod-deploy
+feature-branch → PR → GitHub Actions (lint/type-check) → preview URL on Vercel → merge → prod deploy
 ```
 
-### Databasmigrationer i produktion
+### Database migrations in production
 
 ```bash
-# Kör manuellt efter merge när ny SQL-fil lagts till
+# Run manually after merge when a new SQL file has been added
 npx tsx db/migrate.ts
 ```
 
-Migreringsscriptet håller koll på körda filer via en `migrations`-tabell i databasen — samma fil körs aldrig två gånger.
+The migration script tracks executed files via a `migrations` table in the database — the same file is never run twice.
 
-## Lokal utveckling
+## Local Development
 
 ```bash
-docker compose up -d     # Starta Postgres
-npm run dev              # Starta Next.js
+docker compose up -d     # Start Postgres
+npm run dev              # Start Next.js
 ```
 
-## Miljövariabler
+## Environment Variables
 
 ```env
-# Lokalt (.env.local)
+# Local (.env.local)
 DATABASE_URL=postgresql://user:password@localhost:5432/dalsland
 NEXTAUTH_SECRET=...
 NEXTAUTH_URL=http://localhost:3000
 
-# Produktion (sätts i Vercel dashboard)
-DATABASE_URL=...         # Injiceras automatiskt av Neon-integrationen
+# Production (set in Vercel dashboard)
+DATABASE_URL=...         # Injected automatically by the Neon integration
 NEXTAUTH_SECRET=...
-NEXTAUTH_URL=https://din-domän.se
+NEXTAUTH_URL=https://your-domain.com
 ```

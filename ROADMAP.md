@@ -1,127 +1,127 @@
 # Roadmap — Dalsland Web
 
-Statusar: `[ ]` ej påbörjad · `[~]` pågående · `[x]` klar
+Statuses: `[ ]` not started · `[~]` in progress · `[x]` done
 
 ---
 
-## Milestone 0 — Grund och infrastruktur
+## Milestone 0 — Foundation and infrastructure
 
-Teknisk grund på plats innan vi bygger features.
+Technical foundation in place before building features.
 
-- [x] Initiera Next.js-projekt med Tailwind CSS
-- [ ] Sätt upp GitHub-repo
-- [x] GitHub Actions pipeline (build-check vid push/PR)
-- [ ] Installera postgres.js och tsx
-- [ ] Skapa `db/index.ts` — uppkoppling mot Postgres
-- [ ] Skapa `db/migrate.ts` — migreringsscript
-- [ ] Sätt upp Docker Compose för lokal Postgres
-- [ ] Skapa `.env.local` med rätt variabler
+- [x] Initialize Next.js project with Tailwind CSS
+- [ ] Set up GitHub repo
+- [x] GitHub Actions pipeline (build check on push/PR)
+- [ ] Install postgres.js and tsx
+- [ ] Create `db/index.ts` — connection to Postgres
+- [ ] Create `db/migrate.ts` — migration script
+- [ ] Set up Docker Compose for local Postgres
+- [ ] Create `.env.local` with correct variables
 
 ---
 
-## Milestone 1 — Databas och auth
+## Milestone 1 — Database and auth
 
-Användare, roller och inloggning.
+Users, roles, and login.
 
-**Som ägare vill jag kunna logga in på en adminvy** så att jag kan hantera bokningar utan att gäster kommer åt det.
+**As an owner I want to be able to log in to an admin view** so that I can manage bookings without guests having access.
 
 - [ ] SQL: `001_create_users.sql`
 - [ ] SQL: `002_create_bookings.sql`
 - [ ] SQL: `003_create_blocked_dates.sql`
 - [ ] SQL: `004_create_attractions.sql`
-- [ ] Installera och konfigurera Auth.js
-- [ ] Inloggningssida (`/login`)
-- [ ] Skydda `/admin/**` via `middleware.ts`
-- [ ] Seed-script — skapa första admin-användaren
+- [ ] Install and configure Auth.js
+- [ ] Login page (`/login`)
+- [ ] Protect `/admin/**` via `middleware.ts`
+- [ ] Seed script — create the first admin user
 
 ---
 
-## Milestone 2 — Landningssida
+## Milestone 2 — Landing page
 
-Gästernas första intryck av stället.
+The guests' first impression of the property.
 
-**Som gäst vill jag se vad stället är och hur det ser ut** så att jag kan avgöra om det passar mig.
+**As a guest I want to see what the property is and what it looks like** so that I can decide if it suits me.
 
-- [ ] Grundlayout med header och footer
-- [ ] Sektion: text om stället (rubrik, beskrivning, fakta)
-- [ ] Sektion: bildgalleri
-- [ ] Sektion: karta med Leaflet.js som visar var stället ligger
-- [ ] Sektion: highlights/features (t.ex. antal bäddar, natur, sjö)
-- [ ] Länk/knapp till bokningssidan
-
----
-
-## Milestone 3 — Bokningssida
-
-Gäster kan se tillgänglighet och skicka en förfrågan.
-
-**Som gäst vill jag kunna se lediga datum och skicka en bokningsförfrågan** så att jag kan reservera stället.
-
-- [ ] Kalendervy med lediga/blockerade datum
-- [ ] Bokningsformulär (namn, e-post, telefon, datum, antal gäster, meddelande)
-- [ ] API: `POST /api/bookings` — spara förfrågan
-- [ ] API: `GET /api/availability` — hämta blockerade datum
-- [ ] Bekräftelsemeddelande till gästen efter inskickad förfrågan
+- [ ] Base layout with header and footer
+- [ ] Section: text about the property (heading, description, facts)
+- [ ] Section: image gallery
+- [ ] Section: map with Leaflet.js showing where the property is located
+- [ ] Section: highlights/features (e.g. number of beds, nature, lake)
+- [ ] Link/button to the booking page
 
 ---
 
-## Milestone 4 — Utforskasida
+## Milestone 3 — Booking page
 
-Vad finns att göra i närheten?
+Guests can view availability and submit a request.
 
-**Som gäst vill jag se vad som finns att göra i närheten** så att jag kan planera min vistelse.
+**As a guest I want to see available dates and submit a booking request** so that I can reserve the property.
 
-- [ ] Sida `/utforska` med lista över attraktioner
-- [ ] Filtrera på typ (sjö / restaurang / sevärdhet / aktivitet)
-- [ ] Karta med nålar för varje attraktion
+- [ ] Calendar view with available/blocked dates
+- [ ] Booking form (name, email, phone, dates, number of guests, message)
+- [ ] API: `POST /api/bookings` — save the request
+- [ ] API: `GET /api/availability` — fetch blocked dates
+- [ ] Confirmation message to the guest after submitting the request
+
+---
+
+## Milestone 4 — Explore page
+
+What is there to do nearby?
+
+**As a guest I want to see what there is to do nearby** so that I can plan my stay.
+
+- [ ] Page `/explore` with a list of attractions
+- [ ] Filter by type (lake / restaurant / sight / activity)
+- [ ] Map with pins for each attraction
 - [ ] API: `GET /api/attractions`
 
 ---
 
-## Milestone 5 — Adminvy
+## Milestone 5 — Admin view
 
-Ägarna kan hantera bokningar och innehåll.
+Owners can manage bookings and content.
 
-**Som ägare vill jag se och hantera inkomna bokningsförfrågningar** så att jag kan godkänna eller avböja dem.
+**As an owner I want to see and manage incoming booking requests** so that I can approve or decline them.
 
-- [ ] `/admin` — översiktssida
-- [ ] `/admin/bokningar` — lista alla bokningar med status
-- [ ] Godkänn / avböj bokning
-- [ ] API: `PATCH /api/bookings/[id]` — uppdatera status
-- [ ] Blockera datum manuellt (t.ex. för eget bruk)
+- [ ] `/admin` — overview page
+- [ ] `/admin/bookings` — list all bookings with status
+- [ ] Approve / decline booking
+- [ ] API: `PATCH /api/bookings/[id]` — update status
+- [ ] Block dates manually (e.g. for personal use)
 
-**Som ägare vill jag kunna hantera användare** så att jag kan ge min bror tillgång utan att dela mitt lösenord.
+**As an owner I want to be able to manage users** so that I can give my brother access without sharing my password.
 
-- [ ] `/admin/användare` — lista användare
-- [ ] Skapa ny användare
-- [ ] Ta bort / ändra roll på användare
+- [ ] `/admin/users` — list users
+- [ ] Create new user
+- [ ] Delete / change role of a user
 
-**Som ägare vill jag kunna lägga till sevärdheter** så att gäster ser vad som finns i närheten.
+**As an owner I want to be able to add attractions** so that guests can see what is nearby.
 
-- [ ] `/admin/attraktioner` — lista attraktioner
-- [ ] Lägg till / redigera / ta bort attraktion
+- [ ] `/admin/attractions` — list attractions
+- [ ] Add / edit / delete attraction
 
 ---
 
-## Milestone 6 — E-post
+## Milestone 6 — Email
 
-Automatiska notifieringar vid bokningar.
+Automatic notifications for bookings.
 
-**Som ägare vill jag få ett mail när en ny bokningsförfrågan kommer in** så att jag inte missar någon.
+**As an owner I want to receive an email when a new booking request comes in** so that I don't miss any.
 
-- [ ] Välj och konfigurera e-posttjänst (Resend rekommenderas)
-- [ ] Skicka mail till ägaren vid ny bokning
-- [ ] Skicka bekräftelsemail till gästen
+- [ ] Choose and configure email service (Resend recommended)
+- [ ] Send email to owner on new booking
+- [ ] Send confirmation email to the guest
 
 ---
 
 ## Milestone 7 — Deploy
 
-Sätta upp produktion.
+Set up production.
 
-- [ ] Skapa konto på Vercel och koppla GitHub-repot
-- [ ] Skapa Neon-databas och koppla via Vercel-integration
-- [ ] Sätt miljövariabler i Vercel dashboard
-- [ ] Kör migreringar mot prod-databasen
-- [ ] Verifiera att appen fungerar i produktion
-- [ ] Koppla eget domännamn (valfritt)
+- [ ] Create account on Vercel and connect the GitHub repo
+- [ ] Create Neon database and connect via Vercel integration
+- [ ] Set environment variables in Vercel dashboard
+- [ ] Run migrations against the prod database
+- [ ] Verify that the app works in production
+- [ ] Connect a custom domain (optional)

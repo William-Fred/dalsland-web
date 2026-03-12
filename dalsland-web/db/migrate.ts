@@ -36,7 +36,7 @@ async function migrate() {
 
     await sql.begin(async (tx) => {
       await tx.unsafe(query);
-      await tx`INSERT INTO migrations (filename) VALUES (${file})`;
+      await tx.unsafe(`INSERT INTO migrations (filename) VALUES (${file})`);
     });
 
     console.log(`  apply ${file}`);

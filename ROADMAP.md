@@ -42,12 +42,12 @@ The guests' first impression of the property.
 
 **As a guest I want to see what the property is and what it looks like** so that I can decide if it suits me.
 
-- [ ] Base layout with header and footer
-- [ ] Section: text about the property (heading, description, facts)
-- [ ] Section: image gallery
-- [ ] Section: map with Leaflet.js showing where the property is located
-- [ ] Section: highlights/features (e.g. number of beds, nature, lake)
-- [ ] Link/button to the booking page
+- [x] Base layout with header and footer
+- [x] Section: text about the property (heading, description, facts)
+- [x] Section: image gallery
+- [x] Section: map with Leaflet.js showing where the property is located
+- [x] Section: highlights/features (e.g. number of beds, nature, lake)
+- [x] Link/button to the booking page
 
 ---
 

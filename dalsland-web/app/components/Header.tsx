@@ -5,7 +5,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-white border-b border-stone-200">
       <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="text-lg font-semibold text-stone-800 tracking-tight">
-          Dalsland Cabin
+          Järbo Råberg 3
         </Link>
         <nav className="flex items-center gap-6 text-sm font-medium text-stone-600">
           <Link href="/explore" className="hover:text-stone-900 transition-colors">

@@ -24,19 +24,29 @@ export default function Home() {
   return (
     <main>
       {/* Hero */}
-      <section className="bg-stone-800 text-white py-32 px-6 text-center">
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-          Your retreat in the heart of Dalsland
-        </h1>
-        <p className="text-stone-300 text-lg max-w-xl mx-auto mb-8">
-          A private cabin by the lake — forest, fresh air, and silence. Exactly what you need.
-        </p>
-        <Link
-          href="/booking"
-          className="inline-block bg-white text-stone-800 font-semibold px-8 py-3 rounded-full hover:bg-stone-100 transition-colors"
-        >
-          Book your stay
-        </Link>
+      <section className="relative text-white py-32 px-6 text-center overflow-hidden">
+        <Image
+          src="/hero.jpg"
+          alt="Cabin by the lake in Dalsland"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative z-10">
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+            Your retreat in the heart of Dalsland
+          </h1>
+          <p className="text-stone-300 text-lg max-w-xl mx-auto mb-8">
+            A private cabin by the lake — forest, fresh air, and silence. Exactly what you need.
+          </p>
+          <Link
+            href="/booking"
+            className="inline-block bg-white text-stone-800 font-semibold px-8 py-3 rounded-full hover:bg-stone-100 transition-colors"
+          >
+            Book your stay
+          </Link>
+        </div>
       </section>
 
       {/* About */}

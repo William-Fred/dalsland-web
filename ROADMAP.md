@@ -29,10 +29,10 @@ Users, roles, and login.
 - [x] SQL: `002_create_blocked_dates.sql`
 - [x] SQL: `003_create_users.sql`
 - [x] SQL: `004_create_attractions.sql`
-- [ ] Install and configure Auth.js
-- [ ] Login page (`/login`)
-- [ ] Protect `/admin/**` via `middleware.ts`
-- [ ] Seed script — create the first admin user
+- [x] Install and configure Auth.js
+- [x] Login page (`/login`)
+- [x] Protect `/admin/**` via `middleware.ts`
+- [x] Seed script — create the first admin user
 
 ---
 

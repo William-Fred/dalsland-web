@@ -32,23 +32,23 @@ A booking site for renting a cabin in Dalsland, Sweden. Guests view the property
 
 ## Repo structure
 
-The repo root and the Next.js app share the same name. The git repo is `dalsland-web/`; the Next.js project was initialized inside it as a subdirectory, also named `dalsland-web/`. This is intentional — the root holds shared config (Docker, CI, docs) while the app is self-contained inside.
+The git root and the Next.js app root are the same directory.
 
 ```
-dalsland-web/               ← git root — docker-compose, CI, docs
-└── dalsland-web/           ← Next.js app root — all npm commands run here
-    ├── app/                ← App Router pages and API routes
-    ├── db/
-    │   ├── index.ts        ← postgres.js connection
-    │   ├── migrate.ts      ← migration runner
-    │   └── migrations/     ← numbered .sql files (never edit after applied)
-    ├── middleware.ts        ← protects /admin/** via Auth.js session
-    └── .env.local          ← gitignored, required for local dev
+dalsland-web/               ← git root AND Next.js app root
+├── app/                    ← App Router pages and API routes
+├── db/
+│   ├── index.ts            ← postgres.js connection
+│   ├── migrate.ts          ← migration runner
+│   └── migrations/         ← numbered .sql files (never edit after applied)
+├── middleware.ts            ← protects /admin/** via Auth.js session
+├── docker-compose.yml
+└── .env.local              ← gitignored, required for local dev
 ```
 
-**Command roots:**
-- `docker compose up -d` → run from **git root** (`dalsland-web/`)
-- `npm run dev / build / lint / migrate` → run from **app root** (`dalsland-web/dalsland-web/`)
+**All commands run from the git root:**
+- `docker compose up -d`
+- `npm run dev / build / lint / migrate`
 
 ## Current state
 
@@ -88,18 +88,16 @@ This keeps the project state accurate and reduces the need to re-read all docs a
 
 **Start the full local stack**
 ```bash
-# from git root
 docker compose up -d
-# from app root
 npm run dev
 ```
 
 **Add a new database migration**
 ```bash
 # 1. Create the next numbered file
-touch dalsland-web/db/migrations/005_your_change.sql
+touch db/migrations/005_your_change.sql
 # 2. Write the SQL, then run it
-npm run migrate   # from app root
+npm run migrate
 ```
 
 **Add a new page/route**
@@ -117,5 +115,5 @@ It is automatically protected — `middleware.ts` guards all `/admin/**` routes.
 
 **Run checks before opening a PR**
 ```bash
-npm run lint && npm run build   # from app root
+npm run lint && npm run build
 ```

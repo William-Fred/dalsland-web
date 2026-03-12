@@ -34,8 +34,10 @@ async function migrate() {
     const filePath = path.join(migrationsDir, file);
     const query = fs.readFileSync(filePath, 'utf8');
 
-    await sql.unsafe(query);
-    await sql`INSERT INTO migrations (filename) VALUES (${file})`;
+    await sql.begin(async (tx) => {
+      await tx.unsafe(query);
+      await tx`INSERT INTO migrations (filename) VALUES (${file})`;
+    });
 
     console.log(`  apply ${file}`);
   }

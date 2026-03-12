@@ -5,7 +5,7 @@ CREATE TABLE attractions (
   description  TEXT,
   lat          NUMERIC(9, 6) NOT NULL,
   lng          NUMERIC(9, 6) NOT NULL,
-  distance_km  NUMERIC(6, 2),
+  distance_km  NUMERIC(6, 2) CHECK (distance_km > 0),
   image_url    TEXT,
   created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

@@ -9,13 +9,13 @@ Statuses: `[ ]` not started · `[~]` in progress · `[x]` done
 Technical foundation in place before building features.
 
 - [x] Initialize Next.js project with Tailwind CSS
-- [ ] Set up GitHub repo
+- [x] Set up GitHub repo
 - [x] GitHub Actions pipeline (build check on push/PR)
-- [ ] Install postgres.js and tsx
-- [ ] Create `db/index.ts` — connection to Postgres
-- [ ] Create `db/migrate.ts` — migration script
-- [ ] Set up Docker Compose for local Postgres
-- [ ] Create `.env.local` with correct variables
+- [x] Install postgres.js and tsx
+- [x] Create `db/index.ts` — connection to Postgres
+- [x] Create `db/migrate.ts` — migration script
+- [x] Set up Docker Compose for local Postgres
+- [x] Create `.env.local.example` with required variables (copy to `.env.local` to start locally)
 
 ---
 
@@ -25,10 +25,10 @@ Users, roles, and login.
 
 **As an owner I want to be able to log in to an admin view** so that I can manage bookings without guests having access.
 
-- [ ] SQL: `001_create_users.sql`
-- [ ] SQL: `002_create_bookings.sql`
-- [ ] SQL: `003_create_blocked_dates.sql`
-- [ ] SQL: `004_create_attractions.sql`
+- [x] SQL: `001_create_bookings.sql`
+- [x] SQL: `002_create_blocked_dates.sql`
+- [x] SQL: `003_create_users.sql`
+- [x] SQL: `004_create_attractions.sql`
 - [ ] Install and configure Auth.js
 - [ ] Login page (`/login`)
 - [ ] Protect `/admin/**` via `middleware.ts`

@@ -8,6 +8,10 @@ export default auth((req) => {
     return NextResponse.redirect(loginUrl);
   }
 
+  if (req.auth.user?.role !== "admin") {
+    return NextResponse.redirect(new URL("/", req.nextUrl.origin));
+  }
+
   return NextResponse.next();
 });
 

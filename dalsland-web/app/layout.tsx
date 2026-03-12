@@ -10,7 +10,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Dalsland Cabin — Your retreat in nature",
+  title: "Järbo Råberg 3 — Your retreat in the heart of Dalsland",
   description:
     "Rent a private cabin by the lake in Dalsland, Sweden. Surrounded by forests, fresh air, and tranquillity.",
 };

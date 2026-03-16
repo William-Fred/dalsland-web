@@ -15,8 +15,8 @@ const markerIcon = L.icon({
   shadowSize: [41, 41],
 });
 
-const LAT = 58.794;
-const LNG = 12.289;
+const LAT = 58.7176262;
+const LNG = 12.0816585;
 
 export default function PropertyMap() {
   useEffect(() => {

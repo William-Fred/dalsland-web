@@ -1,35 +1,27 @@
 import Link from "next/link";
 import Image from "next/image";
+import { BedDouble, Waves, Trees, Flame, MapPin, Droplets } from "lucide-react";
 import MapSection from "./components/MapSection";
 
-const GALLERY_IMAGES = [
-  { src: "https://placehold.co/800x600/a3b18a/ffffff?text=Cabin+exterior", alt: "Cabin exterior" },
-  { src: "https://placehold.co/800x600/588157/ffffff?text=Lake+view", alt: "Lake view" },
-  { src: "https://placehold.co/800x600/3a5a40/ffffff?text=Living+room", alt: "Living room" },
-  { src: "https://placehold.co/800x600/dad7cd/344e41?text=Bedroom", alt: "Bedroom" },
-  { src: "https://placehold.co/800x600/344e41/ffffff?text=Forest+path", alt: "Forest path" },
-  { src: "https://placehold.co/800x600/a3b18a/344e41?text=Sauna", alt: "Sauna" },
-];
-
 const HIGHLIGHTS = [
-  { icon: "🛏", label: "4 beds", detail: "Sleeps up to 6 guests" },
-  { icon: "🏊", label: "Lake access", detail: "Private dock, 50 m from the cabin" },
-  { icon: "🌲", label: "Forest setting", detail: "Surrounded by old-growth pine forest" },
-  { icon: "🔥", label: "Wood sauna", detail: "Traditional Swedish sauna on site" },
-  { icon: "🚤", label: "Boat included", detail: "Row boat available for guests" },
-  { icon: "🏘", label: "Åmål nearby", detail: "Nearest town ~20 km away" },
+  { icon: BedDouble, label: "4 beds", detail: "Sleeps up to 6 guests" },
+  { icon: Waves, label: "Lake access", detail: "Private dock, 50 m from the cabin" },
+  { icon: Trees, label: "Forest setting", detail: "Surrounded by old-growth pine forest" },
+  { icon: Flame, label: "Wood sauna", detail: "Traditional Swedish sauna on site" },
+  { icon: MapPin, label: "Åmål nearby", detail: "Nearest town ~20 km away" },
+  { icon: Droplets, label: "Outdoor pool", detail: "Heated pool open in summer" },
 ];
 
 export default function Home() {
   return (
     <main>
       {/* Hero */}
-      <section className="relative text-white py-32 px-6 text-center overflow-hidden">
+      <section className="relative text-white min-h-[70vh] flex items-center justify-center px-6 text-center overflow-hidden">
         <Image
-          src="/hero.jpg"
+          src="/gallery/raberg_sunset.jpg"
           alt="Cabin by the lake in Dalsland"
           fill
-          className="object-cover"
+          className="object-cover object-[center_50%]"
           priority
         />
         <div className="absolute inset-0 bg-black/50" />
@@ -75,10 +67,10 @@ export default function Home() {
       <section className="bg-stone-100 py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl font-semibold mb-10 text-center">What&apos;s included</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
             {HIGHLIGHTS.map((h) => (
               <div key={h.label} className="bg-white rounded-xl p-6 shadow-sm">
-                <div className="text-3xl mb-2">{h.icon}</div>
+                <div className="mb-3 text-stone-600"><h.icon size={22} strokeWidth={1.5} /></div>
                 <div className="font-semibold text-stone-800">{h.label}</div>
                 <div className="text-sm text-stone-500 mt-1">{h.detail}</div>
               </div>
@@ -91,17 +83,6 @@ export default function Home() {
       <section className="max-w-5xl mx-auto px-6 py-20">
         <h2 className="text-3xl font-semibold mb-8">Gallery</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {GALLERY_IMAGES.map((img) => (
-            <div key={img.alt} className="relative aspect-[4/3] rounded-xl overflow-hidden">
-              <Image
-                src={img.src}
-                alt={img.alt}
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 50vw, 33vw"
-              />
-            </div>
-          ))}
         </div>
         <p className="text-xs text-stone-400 mt-4">Placeholder images — real photos coming soon.</p>
       </section>
